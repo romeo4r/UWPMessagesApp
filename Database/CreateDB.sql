@@ -11,7 +11,7 @@ CREATE TABLE Message (
     Id INT IDENTITY(1,1) PRIMARY KEY,          -- Primary key
     CreatedAt DATETIME NOT NULL DEFAULT GETDATE(), -- Date and time the message was created
     ToField NVARCHAR(255) NOT NULL,            -- Phone Number
-    Message NVARCHAR(MAX) NOT NULL             -- Content of the message
+    MessageText NVARCHAR(MAX) NOT NULL             -- Content of the message
 );
 
 -- Table to log message sending events
@@ -24,7 +24,7 @@ CREATE TABLE MessageSendingLog (
 );
 
 -- Table to store Twilio credentials
-CREATE TABLE TwilioCredentials (
+CREATE TABLE TwilioCredential (
     Id INT IDENTITY(1,1) PRIMARY KEY,          -- Primary key
     Email NVARCHAR(255) NOT NULL,              -- Email associated with the Twilio account
     Password NVARCHAR(255) NOT NULL,           -- Password for the Twilio account (hashed and secured)

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UWPMessagesApp.Data;
+using UWPMessagesApp.Models;
+using UWPMessagesApp.Services;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -25,6 +28,10 @@ namespace UWPMessagesApp
         public MainPage()
         {
             this.InitializeComponent();
+
+            // Initialize basic data in the database
+            DatabaseInitializer.InitializeData();
+
         }
     }
 }
