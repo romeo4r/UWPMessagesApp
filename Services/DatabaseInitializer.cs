@@ -39,29 +39,6 @@ namespace UWPMessagesApp.Services
                     context.MessageSendingLog.Add(messageSendingLog);
                     context.SaveChanges();
                 }
-
-
-                // Check if there is already a Twilio credential in the database, in this case I just using only one record
-                if (!context.TwilioCredential.Any())
-                {
-                    var twilioCredential = new TwilioCredential
-                    {
-                        Email = "romeo4ramos@gmail.com",
-                        Password = HashPassword("Wr12tzqo+") // Encrypt the password
-                    };
-
-                    context.TwilioCredential.Add(twilioCredential);
-                    context.SaveChanges();
-                }
-            }
-        }
-
-        private static string HashPassword(string password)
-        {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
             }
         }
     }

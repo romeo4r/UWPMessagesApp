@@ -23,13 +23,6 @@ CREATE TABLE MessageSendingLog (
     CONSTRAINT FK_MessageSendingLog_Message FOREIGN KEY (MessageId) REFERENCES Message(Id) -- Foreign key constraint to message table
 );
 
--- Table to store Twilio credentials
-CREATE TABLE TwilioCredential (
-    Id INT IDENTITY(1,1) PRIMARY KEY,          -- Primary key
-    Email NVARCHAR(255) NOT NULL,              -- Email associated with the Twilio account
-    Password NVARCHAR(255) NOT NULL,           -- Password for the Twilio account (hashed and secured)
-);
-
 
 
 --Creating DB User

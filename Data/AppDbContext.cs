@@ -8,7 +8,6 @@ namespace UWPMessagesApp.Data
     {
         public DbSet<Message> Message { get; set; }
         public DbSet<MessageSendingLog> MessageSendingLog { get; set; }
-        public DbSet<TwilioCredential> TwilioCredential { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

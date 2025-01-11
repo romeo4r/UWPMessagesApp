@@ -99,13 +99,13 @@ namespace UWPMessagesApp
             // Input validation
             if (string.IsNullOrWhiteSpace(to))
             {
-                await ShowMessageDialogAsync("The 'To' field is required.");
+                await ShowMessageDialogAsync("The Phone Number is required.");
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(messageContent))
             {
-                await ShowMessageDialogAsync("The 'Message' field is required.");
+                await ShowMessageDialogAsync("The Message is required.");
                 return;
             }
 
@@ -261,6 +261,24 @@ namespace UWPMessagesApp
                 MessageTextBox.Text = selectedMessage.MessageText;
             }
         }
+
+        #endregion
+
+        #region Twilio credentials code
+        public static string GetTwilioEmail()
+        {
+            // Recuperar la variable de entorno
+            return Environment.GetEnvironmentVariable("TWILIO_EMAIL", EnvironmentVariableTarget.Process);
+        }
+
+        public static string GetTwilioPassword()
+        {
+            // Recuperar la variable de entorno
+            return Environment.GetEnvironmentVariable("TWILIO_PASSWORD", EnvironmentVariableTarget.Process);
+        }
+
+        string twilioEmail = GetTwilioEmail();
+        string twilioPassword = GetTwilioPassword();
 
 
         #endregion
