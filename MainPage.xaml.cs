@@ -17,10 +17,16 @@ namespace UWPMessagesApp
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        #region Variables
         private List<string> ContactNumbers { get; set; } = new List<string>();
         private ObservableCollection<MessageDisplayModel> Messages { get; set; } = new ObservableCollection<MessageDisplayModel>();
+        #endregion
 
+        #region Control variables
         private bool IsAscending = true; // Track sort direction
+        private bool isFocusHandled = false; // Flag to preves bucles for phone number list
+
+        #endregion
 
         public MainPage()
         {
@@ -53,6 +59,44 @@ namespace UWPMessagesApp
                 // Log or handle the error as needed
                 System.Diagnostics.Debug.WriteLine($"Error loading contacts: {ex.Message}");
             }
+        }
+
+        //Show all the previous phone numbers
+        private void PhoneNumberAutoSuggestBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (isFocusHandled) return;
+
+            isFocusHandled = true;
+
+            var autoSuggestBox = sender as AutoSuggestBox;
+
+            if (autoSuggestBox != null)
+            {
+                // Filter suggestions based on the entered text
+                var enteredText = autoSuggestBox.Text;
+
+                // If no text is entered, show the full list
+                if (string.IsNullOrWhiteSpace(enteredText))
+                {
+                    autoSuggestBox.ItemsSource = ContactNumbers;
+                }
+                else
+                {
+                    // Filter the contact list based on the entered text
+                    autoSuggestBox.ItemsSource = ContactNumbers
+                        .Where(c => c.Contains(enteredText, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+                }
+
+                // Manually open the suggestion list dropdown
+                autoSuggestBox.IsSuggestionListOpen = true;
+            }
+
+            // Restore the flag after a short delay
+            Task.Delay(100).ContinueWith(_ =>
+            {
+                isFocusHandled = false;
+            }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         // Handles the TextChanged event to filter suggestions
@@ -103,6 +147,12 @@ namespace UWPMessagesApp
                 return;
             }
 
+            if (!IsValidPhoneNumber(to))
+            {
+                await ShowMessageDialogAsync("The Phone Number is invalid. Please check the correct format (e.g., +503 7040 6366).");
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(messageContent))
             {
                 await ShowMessageDialogAsync("The Message is required.");
@@ -120,9 +170,12 @@ namespace UWPMessagesApp
                 };
 
                 // Save the message to the database using the MessageService
-                bool result = await MessageService.AddMessageAsync(newMessage);
+                bool resultMessage = await MessageService.AddMessageAsync(newMessage);
 
-                if (result)
+                var messageSendingLogService = new MessageSendingLogService();
+                bool resultMessageSending = await messageSendingLogService.SendMessageAsync(newMessage);
+
+                if (resultMessage & resultMessageSending)
                 {
                     // Notify the user that the message was successfully saved
                     await ShowMessageDialogAsync("The message was sent and saved successfully.");
@@ -148,6 +201,13 @@ namespace UWPMessagesApp
                 // Error handling: show a message if an unexpected exception occurs
                 await ShowMessageDialogAsync($"An error occurred: {ex.Message}");
             }
+        }
+
+        private bool IsValidPhoneNumber(string phoneNumber)
+        {
+            // Regex to validate the phone number starts with '+' and contains only digits (spaces allowed between digits)
+            string pattern = @"^\+[0-9 ]+$";
+            return System.Text.RegularExpressions.Regex.IsMatch(phoneNumber, pattern);
         }
 
         // Helper method to show popup messages to the user
@@ -263,29 +323,6 @@ namespace UWPMessagesApp
         }
 
         #endregion
-
-        #region Twilio credentials code
-        public static string GetTwilioEmail()
-        {
-            // Recuperar la variable de entorno
-            return Environment.GetEnvironmentVariable("TWILIO_EMAIL", EnvironmentVariableTarget.Process);
-        }
-
-        public static string GetTwilioPassword()
-        {
-            // Recuperar la variable de entorno
-            return Environment.GetEnvironmentVariable("TWILIO_PASSWORD", EnvironmentVariableTarget.Process);
-        }
-
-        string twilioEmail = GetTwilioEmail();
-        string twilioPassword = GetTwilioPassword();
-
-
-        #endregion
-
     }
-
-
-
 }
 

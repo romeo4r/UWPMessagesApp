@@ -22,6 +22,7 @@
                 TextChanged="PhoneNumberAutoSuggestBox_TextChanged"
                 SuggestionChosen="PhoneNumberAutoSuggestBox_SuggestionChosen"
                 QuerySubmitted="PhoneNumberAutoSuggestBox_QuerySubmitted"
+                GotFocus="PhoneNumberAutoSuggestBox_GotFocus"
                 Margin="0,0,0,10" />
             <TextBox x:Name="MessageTextBox" Header="Message" PlaceholderText="Enter message" TextWrapping="Wrap" AcceptsReturn="True" Height="100" Margin="0,0,0,10"/>
             <Button x:Name="SendButton" Content="Send" Click="SendButton_Click" HorizontalAlignment="Left"/>
@@ -36,7 +37,7 @@
                         <ColumnDefinition Width="150"/>
                         <ColumnDefinition Width="300"/>
                         <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="300"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Create At" Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Left" Margin="5"
                        Tapped="SortByColumn" Tag="CreateAt"/>
@@ -61,7 +62,7 @@
                             <ColumnDefinition Width="150"/>
                             <ColumnDefinition Width="300"/>
                             <ColumnDefinition Width="150"/>
-                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="300"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{Binding CreateAt}" Grid.Column="0" HorizontalAlignment="Left" Margin="5"/>
                         <TextBlock Text="{Binding To}" Grid.Column="1" HorizontalAlignment="Left" Margin="5"/>
