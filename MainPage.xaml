@@ -8,7 +8,72 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <Grid Padding="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Form Section -->
+        <StackPanel Orientation="Vertical" Margin="0,0,0,20">
+            <AutoSuggestBox
+                x:Name="PhoneNumberAutoSuggestBox"
+                PlaceholderText="Enter or select a phone number"
+                TextChanged="PhoneNumberAutoSuggestBox_TextChanged"
+                SuggestionChosen="PhoneNumberAutoSuggestBox_SuggestionChosen"
+                QuerySubmitted="PhoneNumberAutoSuggestBox_QuerySubmitted"
+                Margin="0,0,0,10" />
+            <TextBox x:Name="MessageTextBox" Header="Message" PlaceholderText="Enter message" TextWrapping="Wrap" AcceptsReturn="True" Height="100" Margin="0,0,0,10"/>
+            <Button x:Name="SendButton" Content="Send" Click="SendButton_Click" HorizontalAlignment="Left"/>
+        </StackPanel>
+
+        <ListView Grid.Row="1" x:Name="MessagesListView" Margin="0,20,0,0" SelectionChanged="MessagesListView_SelectionChanged">
+            <!-- Header Section -->
+            <ListView.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="150"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Create At" Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Left" Margin="5"
+                       Tapped="SortByColumn" Tag="CreateAt"/>
+                    <TextBlock Text="To" Grid.Column="1" FontWeight="Bold" HorizontalAlignment="Left" Margin="5"
+                       Tapped="SortByColumn" Tag="To"/>
+                    <TextBlock Text="Message" Grid.Column="2" FontWeight="Bold" HorizontalAlignment="Left" Margin="5"
+                       Tapped="SortByColumn" Tag="MessageText"/>
+                    <TextBlock Text="Send At" Grid.Column="3" FontWeight="Bold" HorizontalAlignment="Left" Margin="5"
+                       Tapped="SortByColumn" Tag="SendAt"/>
+                    <TextBlock Text="Twilio Code" Grid.Column="4" FontWeight="Bold" HorizontalAlignment="Left" Margin="5"
+                       Tapped="SortByColumn" Tag="TwilioConfirmationCode"/>
+                </Grid>
+            </ListView.Header>
+
+            <!-- Rows Section -->
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <!--IN THIS GRID THE PROPORTIONS IN THE COLUMNS DO NOT WORK, THIS SHOULD BE INVESTIGATED!!!-->
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="300"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="150"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding CreateAt}" Grid.Column="0" HorizontalAlignment="Left" Margin="5"/>
+                        <TextBlock Text="{Binding To}" Grid.Column="1" HorizontalAlignment="Left" Margin="5"/>
+                        <TextBlock Text="{Binding MessageText}" Grid.Column="2" HorizontalAlignment="Left" Margin="5"/>
+                        <TextBlock Text="{Binding SendAt}" Grid.Column="3" HorizontalAlignment="Left" Margin="5"/>
+                        <TextBlock Text="{Binding TwilioConfirmationCode}" Grid.Column="4" HorizontalAlignment="Left" Margin="5"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
 
     </Grid>
+
 </Page>

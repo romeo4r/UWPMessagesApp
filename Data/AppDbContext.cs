@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using UWPMessagesApp.Models;
 
 namespace UWPMessagesApp.Data
@@ -12,7 +13,15 @@ namespace UWPMessagesApp.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // Connection string to SQL Server
-            optionsBuilder.UseSqlServer("Server=localhost,1433;Database=UWPMessagesDB;User Id=UserUWPMessages;Password=Wr12azqo+;");
+
+            var connectionString = Environment.GetEnvironmentVariable("UWPMessagesDB_CONNECTION_STRING");
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new InvalidOperationException("The connection string is not configured.");
+            }
+
+            optionsBuilder.UseSqlServer(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
